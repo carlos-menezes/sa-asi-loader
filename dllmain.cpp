@@ -7,14 +7,14 @@
 
 HMODULE DLL_ENTRY_POINT;
 
-static void GetASIFiles(const std::wstring& directory, std::vector<std::wstring>* out) {
+static void GetASIFiles(const std::wstring& directory, std::vector<std::wstring>& out) {
     WIN32_FIND_DATAW findFileData;
     HANDLE hFind = FindFirstFileW(directory.c_str(), &findFileData);
 
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
             if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                out->push_back(directory.substr(0, directory.find_last_of(L'\\') + 1) + findFileData.cFileName);
+                out.push_back(directory.substr(0, directory.find_last_of(L'\\') + 1) + findFileData.cFileName);
             }
         } while (FindNextFileW(hFind, &findFileData) != 0);
         FindClose(hFind);
@@ -31,7 +31,7 @@ static void InitializeASILoader() {
 
     // Find all .asi files in the directory
     std::vector<std::wstring> asiFiles;
-    GetASIFiles(dllDirectory + L"*.asi", &asiFiles);
+    GetASIFiles(dllDirectory + L"*.asi", asiFiles);
 
     // Load each .asi file
     for (const auto& asiFile : asiFiles) {
