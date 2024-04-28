@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "dllmain.h"
 
 #include <windows.h>
